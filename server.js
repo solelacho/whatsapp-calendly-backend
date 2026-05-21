@@ -94,4 +94,9 @@ app.get("/api/availability", async (req, res) => {
 // Health check
 app.get("/", (req, res) => res.json({ status: "ok", service: "WhatsApp × Calendly Backend" }));
 
+app.post("/webhook/whatsapp", (req, res) => {
+  console.log(req.body)
+  res.sendStatus(200)
+})
+
 app.listen(PORT, () => console.log(`✅ Server corriendo en puerto ${PORT}`));
