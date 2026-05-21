@@ -94,6 +94,22 @@ app.get("/api/availability", async (req, res) => {
 // Health check
 app.get("/", (req, res) => res.json({ status: "ok", service: "WhatsApp × Calendly Backend" }));
 
+const VERIFY_TOKEN = "sole1230";
+
+// Verificación de webhook (Meta WhatsApp)
+app.get("/webhook/whatsapp", (req, res) => {
+  const mode = req.query["hub.mode"];
+  const token = req.query["hub.verify_token"];
+  const challenge = req.query["hub.challenge"];
+
+  if (mode === "subscribe" && token === VERIFY_TOKEN) {
+    console.log("Webhook verificado ✅");
+    res.status(200).send(challenge);
+  } else {
+    res.sendStatus(403);
+  }
+});
+
 app.post("/webhook/whatsapp", (req, res) => {
   console.log(req.body)
   res.sendStatus(200)
