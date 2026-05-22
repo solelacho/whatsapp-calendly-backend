@@ -6,11 +6,11 @@ import cors from "cors";
 import fetch from "node-fetch";
 import Anthropic from "@anthropic-ai/sdk";
 
-const app = express();
-const PORT = process.env.PORT || 3000;
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
 });
+const app = express();
+const PORT = process.env.PORT || 3000;
 
 // ── Variables de entorno (configurar en el panel del hosting) ──
 const CALENDLY_TOKEN = process.env.CALENDLY_TOKEN;
