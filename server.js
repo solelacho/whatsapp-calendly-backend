@@ -117,3 +117,13 @@ app.post("/webhook/whatsapp", (req, res) => {
 })
 
 app.listen(PORT, () => console.log(`✅ Server corriendo en puerto ${PORT}`));
+
+app.post("/test-post", (req, res) => {
+  console.log("🔥 TEST POST RECIBIDO");
+  console.log(JSON.stringify(req.body, null, 2));
+
+  res.json({
+    ok: true,
+    received: req.body
+  });
+});
