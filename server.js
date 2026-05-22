@@ -4,7 +4,7 @@
 import express from "express";
 import cors from "cors";
 import fetch from "node-fetch";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenAI } from "@google/genai";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -14,7 +14,9 @@ const app = express();
 // ── Variables de entorno (configurar en el panel del hosting) ──
 const CALENDLY_TOKEN = process.env.CALENDLY_TOKEN;
 const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || "*"; // ej: "https://tuapp.vercel.app"
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const ai = new GoogleGenAI({
+  apiKey: process.env.GEMINI_API_KEY,
+});
 const PORT = process.env.PORT || 3000;
 
 // ── Middlewares ──
@@ -132,20 +134,15 @@ app.post("/test-post", (req, res) => {
 });
 
 app.get("/test-ai", async (req, res) => {
-  try { 
-    
-    const model = genAI.getGenerativeModel({
+  try {
+    const result = await ai.models.generateContent({
       model: "gemini-1.5-flash",
+      contents: "Decí hola como un asistente amable",
     });
 
-    const result = await model.generateContent(
-      "Decí hola como un asistente espiritual amable"
-    );
-
-    const response = await result.response;
-    const text = response.text();
-
-    res.json({ text });
+    res.json({
+      text: result.text,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: error.message });
