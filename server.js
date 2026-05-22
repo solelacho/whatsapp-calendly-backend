@@ -5,6 +5,8 @@ import express from "express";
 import cors from "cors";
 import fetch from "node-fetch";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import dotenv from "dotenv";
+dotenv.config();
 
 
 const app = express();
@@ -130,9 +132,10 @@ app.post("/test-post", (req, res) => {
 });
 
 app.get("/test-ai", async (req, res) => {
-  try {
+  try { 
+    
     const model = genAI.getGenerativeModel({
-      model: "gemini-1.0-pro",
+      model: "gemini-1.5-flash",
     });
 
     const result = await model.generateContent(
