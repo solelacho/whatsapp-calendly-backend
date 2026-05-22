@@ -136,12 +136,13 @@ app.post("/test-post", (req, res) => {
 app.get("/test-ai", async (req, res) => {
   try {
     const result = await ai.models.generateContent({
-      model: "gemini-1.5-flash",
+      model: "gemini-2.5-flash", // 1. Cambiado a la versión estable actual
       contents: "Decí hola como un asistente amable",
     });
 
     res.json({
-      text: result.text,
+      // 2. En el SDK nuevo (@google/genai), el texto se obtiene directamente así
+      text: result.text, 
     });
   } catch (error) {
     console.error(error);
