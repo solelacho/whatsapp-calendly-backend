@@ -10,11 +10,11 @@ const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
 });
 const app = express();
-const PORT = process.env.PORT || 3000;
 
 // ── Variables de entorno (configurar en el panel del hosting) ──
 const CALENDLY_TOKEN = process.env.CALENDLY_TOKEN;
 const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || "*"; // ej: "https://tuapp.vercel.app"
+const PORT = process.env.PORT || 3000;
 
 // ── Middlewares ──
 app.use(cors({ origin: ALLOWED_ORIGIN }));
@@ -120,8 +120,6 @@ app.post("/webhook/whatsapp", (req, res) => {
   res.sendStatus(200)
 })
 
-app.listen(PORT, () => console.log(`✅ Server corriendo en puerto ${PORT}`));
-
 app.post("/test-post", (req, res) => {
   console.log("🔥 TEST POST RECIBIDO");
   console.log(JSON.stringify(req.body, null, 2));
@@ -150,3 +148,4 @@ app.get("/test-claude", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+app.listen(PORT, () => console.log(`✅ Server corriendo en puerto ${PORT}`));
