@@ -132,7 +132,7 @@ app.post("/test-post", (req, res) => {
 app.get("/test-ai", async (req, res) => {
   try {
     const model = genAI.getGenerativeModel({
-      model: "gemini-1.5-pro",
+      model: "gemini-1.0-pro",
     });
 
     const result = await model.generateContent(
