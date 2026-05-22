@@ -111,7 +111,8 @@ app.get("/webhook/whatsapp", (req, res) => {
 });
 
 app.post("/webhook/whatsapp", (req, res) => {
-  console.log(req.body)
+ // console.log(req.body)
+  console.log(JSON.stringify(req.body, null, 2))
   res.sendStatus(200)
 })
 
