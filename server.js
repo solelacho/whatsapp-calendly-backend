@@ -4,16 +4,15 @@
 import express from "express";
 import cors from "cors";
 import fetch from "node-fetch";
-import Anthropic from "@anthropic-ai/sdk";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const anthropic = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
-});
+
 const app = express();
 
 // ── Variables de entorno (configurar en el panel del hosting) ──
 const CALENDLY_TOKEN = process.env.CALENDLY_TOKEN;
 const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || "*"; // ej: "https://tuapp.vercel.app"
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const PORT = process.env.PORT || 3000;
 
 // ── Middlewares ──
@@ -129,23 +128,25 @@ app.post("/test-post", (req, res) => {
     received: req.body
   });
 });
-app.get("/test-claude", async (req, res) => {
+
+app.get("/test-ai", async (req, res) => {
   try {
-    const msg = await anthropic.messages.create({
-      model: "claude-3-5-sonnet-latest",
-      max_tokens: 200,
-      messages: [
-        {
-          role: "user",
-          content: "Decí hola como un asistente espiritual amable",
-        },
-      ],
+    const model = genAI.getGenerativeModel({
+      model: "gemini-1.5-flash",
     });
 
-    res.json(msg);
+    const result = await model.generateContent(
+      "Decí hola como un asistente espiritual amable"
+    );
+
+    const response = await result.response;
+    const text = response.text();
+
+    res.json({ text });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: error.message });
   }
 });
+
 app.listen(PORT, () => console.log(`✅ Server corriendo en puerto ${PORT}`));
