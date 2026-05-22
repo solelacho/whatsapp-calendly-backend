@@ -4,9 +4,13 @@
 import express from "express";
 import cors from "cors";
 import fetch from "node-fetch";
+import Anthropic from "@anthropic-ai/sdk";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const anthropic = new Anthropic({
+  apiKey: process.env.ANTHROPIC_API_KEY,
+});
 
 // ── Variables de entorno (configurar en el panel del hosting) ──
 const CALENDLY_TOKEN = process.env.CALENDLY_TOKEN;
@@ -126,4 +130,23 @@ app.post("/test-post", (req, res) => {
     ok: true,
     received: req.body
   });
+});
+app.get("/test-claude", async (req, res) => {
+  try {
+    const msg = await anthropic.messages.create({
+      model: "claude-3-5-sonnet-latest",
+      max_tokens: 200,
+      messages: [
+        {
+          role: "user",
+          content: "Decí hola como un asistente espiritual amable",
+        },
+      ],
+    });
+
+    res.json(msg);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error.message });
+  }
 });
